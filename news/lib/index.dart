@@ -3,7 +3,6 @@ import 'navigationIcon.dart';
 import 'config.dart';
 import 'home/home.dart';
 import 'about/about.dart';
-
 class Index extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new IndexState();

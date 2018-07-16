@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'config.dart';
-import 'navigationIcon.dart';
 import 'index.dart';
 
-void main() => runApp(new DoubanMovie());
+void main() => runApp(new FlutterNews());
 
 
-class DoubanMovie extends StatelessWidget {
+class FlutterNews extends StatelessWidget {
   @override
     Widget build(BuildContext context) {
       return new MaterialApp(
