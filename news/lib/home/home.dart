@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:news/config.dart';
-import 'package:news/navigationIcon.dart';
+// import 'package:news/config.dart';
 import 'top.dart';
 class Home extends StatefulWidget {
   @override
