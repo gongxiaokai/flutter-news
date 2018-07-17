@@ -3,6 +3,7 @@ import 'package:http/http.dart' as Http;
 import './model/article.dart';
 import 'dart:convert';
 import 'package:news/config.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class Content extends StatefulWidget {
   final String channelId;
@@ -24,14 +25,15 @@ class ContentState extends State<Content> {
   ArticleList _list = new ArticleList();
 
   _feachData() async {
-    String baseUrl = Config.baseUrl;
-    String apiId = Config.newsapiId;
-    String appinfo = Config.appinfo;
-    String url = "$baseUrl$apiId$appinfo" + "channelId=$channelId";
-    await Http.get(url).then((Http.Response res) {
-      // print(res.body);
-      if (!mounted) {return ;}
-      Map jsonMap = json.decode(res.body);
+    final String baseUrl = Config.baseUrl;
+    final String apiId = Config.newsapiId;
+    final String appinfo = Config.appinfo;
+    final String url = "$baseUrl$apiId$appinfo" + "channelId=$channelId";
+    final response = await Http.get(url);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print(response.statusCode);
+      Map jsonMap = json.decode(response.body);
       // print(jsonMap);
       ArticleList list = ArticleList.fromJson(jsonMap);
       // list.articles.forEach((f) {
@@ -41,13 +43,21 @@ class ContentState extends State<Content> {
       var newlist =
           list.articles.where((test) => test.havePic == true).toList();
       // print(list);
+      _list.articles = newlist;
 
+      if (!mounted) {
+        return;
+      }
+      print("aaa");
       setState(() {
         _isloading = false;
-        _list.articles = newlist;
       });
-      // print(list);
-    });
+    }
+    // await Http.get(url).then((Http.Response res) {
+    //   // print(res.body);
+
+    //   // print(list);
+    // });
   }
 
   @override
@@ -55,6 +65,12 @@ class ContentState extends State<Content> {
     // TODO: implement initState
     super.initState();
     _feachData();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -84,11 +100,14 @@ class OneColum extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    print(article.imageurls.first.contains('baidu'));
     var stack = new Stack(
       children: <Widget>[
-        new Image.network(article.imageurls.first),
+        !article.imageurls.first.contains('baidu')
+            ? new Image.network(article.imageurls.first,width: 400.0,height: 200.0,)
+            : new Center(child: new Icon(Icons.error)) ,
         new Container(
-          padding: const EdgeInsets.only(top: 210.0),
+          padding: const EdgeInsets.only(top: 150.0),
           child: new Container(
             decoration: new BoxDecoration(
               color: Colors.black45,
@@ -113,7 +132,12 @@ class OneColum extends StatelessWidget {
       ],
     );
 
-    return new Container(margin: const EdgeInsets.all(10.0), child: stack);
+    return new Container(
+      height: 200.0,
+      width: 400.0,
+      margin: const EdgeInsets.all(10.0), 
+      child: stack
+      );
   }
   // final  List<String> columnData;
 
