@@ -4,7 +4,8 @@ import './model/article.dart';
 import 'dart:convert';
 import 'package:news/config.dart';
 import 'package:transparent_image/transparent_image.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
+import 'detail.dart';
 class Content extends StatefulWidget {
   final String channelId;
 
@@ -17,47 +18,34 @@ class Content extends StatefulWidget {
 }
 
 class ContentState extends State<Content> {
-  final String channelId;
+  final String typeId;
 
-  ContentState(this.channelId);
+  ContentState(this.typeId);
 
   bool _isloading = true;
   ArticleList _list = new ArticleList();
 
   _feachData() async {
     final String baseUrl = Config.baseUrl;
-    final String apiId = Config.newsapiId;
+    final String apiId = Config.weDetail;
     final String appinfo = Config.appinfo;
-    final String url = "$baseUrl$apiId$appinfo" + "channelId=$channelId";
-    final response = await Http.get(url);
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      print(response.statusCode);
-      Map jsonMap = json.decode(response.body);
-      // print(jsonMap);
-      ArticleList list = ArticleList.fromJson(jsonMap);
-      // list.articles.forEach((f) {
-      //   print(f.title + ":" + f.pubDate + f.imageurls.length.toString());
-      // });
-
-      var newlist =
-          list.articles.where((test) => test.havePic == true).toList();
-      // print(list);
-      _list.articles = newlist;
-
-      if (!mounted) {
-        return;
+    final String url = "$baseUrl$apiId$appinfo" + "typeId=$typeId";
+    await Http.get(url).then((Http.Response response) {
+      if (response.statusCode == 200) {
+        print(response.statusCode);
+        Map jsonMap = json.decode(response.body);
+        // print(jsonMap);
+        ArticleList list = ArticleList.fromJson(jsonMap);
+        if (!mounted) {
+          return;
+        }
+        print("aaa");
+        setState(() {
+          _list = list;
+          _isloading = false;
+        });
       }
-      print("aaa");
-      setState(() {
-        _isloading = false;
-      });
-    }
-    // await Http.get(url).then((Http.Response res) {
-    //   // print(res.body);
-
-    //   // print(list);
-    // });
+    });
   }
 
   @override
@@ -100,52 +88,58 @@ class OneColum extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    print(article.imageurls.first.contains('baidu'));
     var stack = new Stack(
       children: <Widget>[
-        !article.imageurls.first.contains('baidu')
-            ? new Image.network(article.imageurls.first,width: 400.0,height: 200.0,)
-            : new Center(child: new Icon(Icons.error)) ,
-        new Container(
-          padding: const EdgeInsets.only(top: 150.0),
-          child: new Container(
-            decoration: new BoxDecoration(
-              color: Colors.black45,
-            ),
-            alignment: Alignment.bottomLeft,
-            width: 400.0,
-            height: 50.0,
-            child: new Center(
-              child: new Text(
-                article.title,
-                textAlign: TextAlign.left,
-                style: new TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                maxLines: 1,
+        new CachedNetworkImage(
+          imageUrl: article.contentImg,
+          errorWidget: new Center(child: new Icon(Icons.error)),
+          width: MediaQuery.of(context).size.width,
+          fit: BoxFit.cover,
+        ),
+        new GestureDetector(
+            child: new Container(
+              decoration: new BoxDecoration(
+                color: Colors.black45,
+              ),
+              child: _ArticleTitleWidget(
+                title: article.title,
               ),
             ),
-          ),
-        )
+            onTap: () {
+              Navigator.push(context,
+              new MaterialPageRoute(
+                builder: (context)=> new Detail(article.url)
+              ));
+              print("ed");
+            }),
       ],
     );
 
     return new Container(
-      height: 200.0,
-      width: 400.0,
-      margin: const EdgeInsets.all(10.0), 
-      child: stack
-      );
+        height: 200.0,
+        width: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.only(top: 10.0),
+        child: stack);
   }
-  // final  List<String> columnData;
+}
 
-  // OneColum({List<String> columnData}) : this.columnData = columnData;
 
-  // @override
-  // // TODO: implement children
-  // List<Widget> get children {
-  //   return columnData.map((f) => new Text(f)).toList();
-  // }
+class _ArticleTitleWidget extends StatelessWidget {
+  final String title;
+  _ArticleTitleWidget({String title}) : title = title;
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return new Center(
+      child: new Text(
+        title,
+        textAlign: TextAlign.center,
+        style: new TextStyle(
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
 }

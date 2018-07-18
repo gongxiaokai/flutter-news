@@ -6,9 +6,8 @@ class Config {
   static String baseUrl = "http://route.showapi.com/";
   static String appid = "69841";
   static String secret = 'd8d735599e2c405987c2810061f15180';
-  static String apiId = '109-34';
   static String appinfo = "?showapi_appid=69841&showapi_sign=d8d735599e2c405987c2810061f15180&";
-  static String channelapiId = '109-34';
-  static String newsapiId = '109-35';
+  static String weTypeId = '582-1';
+  static String weDetail = '582-2';
 
 }

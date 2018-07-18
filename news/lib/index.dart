@@ -21,12 +21,12 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
     navigationIcons = <NavigationIcon>[
       new NavigationIcon(
         icon: new Icon(Icons.home),
-        title: new Text("News"),
+        title: new Text("首页"),
         vsync: this,
       ),
       new NavigationIcon(
         icon: new Icon(Icons.info),
-        title: new Text("About"),
+        title: new Text("关于"),
         vsync: this,
       )
     ];

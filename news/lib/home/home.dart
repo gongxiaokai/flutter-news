@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './model/channel.dart';
+import './model/weType.dart';
 import 'package:http/http.dart' as Http;
 import 'dart:convert';
 import 'package:news/config.dart';
@@ -14,18 +14,18 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> with TickerProviderStateMixin {
   bool _isloading = true;
-  ChannelList _list;
+  WeTypeList _list;
   _feachData() async {
     String appid = Config.appid;
     String secret = Config.secret;
     String baseUrl = Config.baseUrl;
-    String apiId = Config.apiId;
+    String apiId = Config.weTypeId;
     String url = "$baseUrl$apiId?showapi_appid=$appid&showapi_sign=$secret";
     await Http.get(url).then((Http.Response res) {
       // print(res.statusCode);
       Map channelListJson = json.decode(res.body);
       // print(channelListJson);
-      ChannelList list = ChannelList.fromJson(channelListJson);
+      WeTypeList list = WeTypeList.fromJson(channelListJson);
       // list.channels.forEach((f) {
       //   print(f.channelId + ":" + f.channelName);
       // });
@@ -55,7 +55,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             ),
           )
         : new DefaultTabController(
-            length: _list.channels.length,
+            length: _list.types.length,
             child: new Scaffold(
                 appBar: new AppBar(
                   title: new Text("新闻"),
@@ -63,33 +63,17 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                       isScrollable: true,
                       labelColor: Colors.white,
                       unselectedLabelColor: Colors.black,
-                      tabs: _list.channels
-                          .map((f) => new Tab(text: f.channelName))
+                      tabs: _list.types
+                          .map((f) => new Tab(text: f.name))
                           .toList()),
                 ),
                 body: new TabBarView(
-                  children: _list.channels
-                      .map((f) => new Content(channelId: f.channelId))
+                  children: _list.types
+                      .map((f) => new Content(channelId: f.id))
                       .toList(),
                 )),
           );
   }
-
-  // featchData() {
-  //   final url = "https://api.douban.com/v2/movie/in_theaters";
-  //   final response = http.get(url);
-  //   response.then((onValue){
-  //     if (onValue.statusCode == 200){
-  //       print(onValue.body);
-  //       // final re = InTheaters.fromJson(onValue.body);
-  //       // print(re.count);
-  //     }
-  //   });
-  //   // if response.statusCode == 200 {
-  //   //   print("ok");
-  //   // }
-
-  // }
 
   @override
     void dispose() {
