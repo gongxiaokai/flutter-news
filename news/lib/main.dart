@@ -6,6 +6,7 @@ void main() => runApp(new FlutterNews());
 
 
 class FlutterNews extends StatelessWidget {
+
   @override
     Widget build(BuildContext context) {
       return new MaterialApp(

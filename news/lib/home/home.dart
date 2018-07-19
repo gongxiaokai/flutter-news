@@ -4,7 +4,8 @@ import 'package:http/http.dart' as Http;
 import 'dart:convert';
 import 'package:news/config.dart';
 import 'content.dart';
-
+import 'package:news/shared.dart';
+import 'dart:async';
 class Home extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -15,7 +16,7 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> with TickerProviderStateMixin {
   bool _isloading = true;
-  WeTypeList _list;
+  List<WeType> _list;
   // var config = configSingletn;
   _feachData() async {
     String appid = Config.appid;
@@ -26,13 +27,23 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     await Http.get(url).then((Http.Response res) {
       Map channelListJson = json.decode(res.body);
       WeTypeList list = WeTypeList.fromJson(channelListJson);
-      Config config = Config.shared;
-      config.allTypes = list.types;
-      // Config().allTypes = list.types;
-      setState(() {
-        _isloading = false;
-        _list = list;
+            print("object");
+      
+      Shared.saveSelectedType(list.types).then((onValue){
+        print(onValue);
       });
+      
+      // r.then((onValue){
+      //   print(onValue);
+      //   if (onValue!= null){
+      //     print(onValue.length.toString() + "0009999");
+      //     setState(() {
+      //     _isloading = false;
+      //     _list = onValue;
+      // });
+      //   }
+      // });
+      
     });
   }
 
@@ -54,7 +65,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             ),
           )
         : new DefaultTabController(
-            length: Config.shared.allTypes.length,
+            length: _list.length,
             child: new Scaffold(
                 appBar: new AppBar(
                   title: new Text("新闻"),
@@ -62,12 +73,12 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                       isScrollable: true,
                       labelColor: Colors.white,
                       unselectedLabelColor: Colors.black,
-                      tabs: Config.shared.allTypes
+                      tabs: _list
                           .map((f) => new Tab(text: f.name))
                           .toList()),
                 ),
                 body: new TabBarView(
-                  children: Config.shared.allTypes
+                  children: _list
                       .map((f) => new Content(channelId: f.id))
                       .toList(),
                 )),
