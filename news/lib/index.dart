@@ -3,6 +3,8 @@ import 'navigationIcon.dart';
 import 'config.dart';
 import 'home/home.dart';
 import 'about/about.dart';
+import 'category/category.dart';
+
 class Index extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new IndexState();
@@ -25,6 +27,11 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
         vsync: this,
       ),
       new NavigationIcon(
+        icon: new Icon(Icons.category),
+        title: new Text("分类"),
+        vsync: this,
+      ),
+      new NavigationIcon(
         icon: new Icon(Icons.info),
         title: new Text("关于"),
         vsync: this,
@@ -33,6 +40,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
 
     pageList = <StatefulWidget>[
       new Home(),
+      new Category(),
       new About(),
     ];
 

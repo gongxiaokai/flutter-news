@@ -13,7 +13,7 @@ class AboutState extends State<About> with TickerProviderStateMixin {
         theme: Config.themeData,
         home: new Scaffold(
           appBar: new AppBar(
-            title: new Text("about"),
+            title: new Text("关于"),
           ),
           body: new Center(
             child: new Text("about data"),
