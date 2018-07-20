@@ -3,14 +3,19 @@ import 'dart:async';
 import 'package:news/home/model/weType.dart';
 
 class Shared {
-  static Future<String> saveSelectedType(List<WeType> list) async{
+  static Future<List<WeType>> saveSelectedType(List<WeType> list) async{
     print(list);
-    String a = list.first.name;
-    print(a+"99999");
-    // SharedPreferences pre =  await SharedPreferences.getInstance();
-    // await pre.setStringList("typeNames", list.map((WeType f) { return f.name}).toList());
-    // await pre.setStringList("typeIds", list.map((WeType f) {return f.id}).toList());
-    return "aaaa";
+    // list.forEach((WeType f){
+    //   // WeType aaaaa = f;
+    //   print(f.name+"nnnnnnnnnnnnnnn");
+    // });
+    // String a = list.first.name;
+
+    // print(a+"99999");
+    SharedPreferences pre =  await SharedPreferences.getInstance();
+    await pre.setStringList("typeNames", list.map((WeType f) { return f.name;}).toList());
+    await pre.setStringList("typeIds", list.map((WeType f) {return f.id;}).toList());
+    return getSelectedType();
   }
 
   static Future<List<WeType>> getSelectedType() async {

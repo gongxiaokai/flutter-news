@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as Http;
-import './model/article.dart';
-import 'dart:convert';
-import 'package:news/config.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:news/home/model/article.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'detail.dart';
+import 'package:news/api/api.dart';
+
 class Content extends StatefulWidget {
   final String channelId;
 
@@ -23,36 +21,45 @@ class ContentState extends State<Content> {
   ContentState(this.typeId);
 
   bool _isloading = true;
-  ArticleList _list = new ArticleList();
+  List<Article> _list;
 
-  _feachData() async {
-    final String baseUrl = Config.baseUrl;
-    final String apiId = Config.weDetail;
-    final String appinfo = Config.appinfo;
-    final String url = "$baseUrl$apiId$appinfo" + "typeId=$typeId";
-    await Http.get(url).then((Http.Response response) {
-      if (response.statusCode == 200) {
-        print(response.statusCode);
-        Map jsonMap = json.decode(response.body);
-        // print(jsonMap);
-        ArticleList list = ArticleList.fromJson(jsonMap);
-        if (!mounted) {
-          return;
-        }
-        print("aaa");
-        setState(() {
-          _list = list;
-          _isloading = false;
-        });
-      }
-    });
-  }
+  // _feachData() async {
+  //   final String baseUrl = Config.baseUrl;
+  //   final String apiId = Config.weDetail;
+  //   final String appinfo = Config.appinfo;
+  //   final String url = "$baseUrl$apiId$appinfo" + "typeId=$typeId";
+  //   await Http.get(url).then((Http.Response response) {
+  //     if (response.statusCode == 200) {
+  //       print(response.statusCode);
+  //       Map jsonMap = json.decode(response.body);
+  //       // print(jsonMap);
+  //       ArticleList list = ArticleList.fromJson(jsonMap);
+  //       if (!mounted) {
+  //         return;
+  //       }
+  //       print("aaa");
+  //       setState(() {
+  //         _list = list;
+  //         _isloading = false;
+  //       });
+  //     }
+  //   });
+  // }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _feachData();
+    // _feachData();
+
+    API.featchTypeDetailList(typeId, (List<Article> callback) {
+      setState(() {
+        _isloading = false;
+        _list = callback;
+      });
+    }, errorback: (e) {
+      print("error:$e");
+    });
   }
 
   @override
@@ -72,7 +79,7 @@ class ContentState extends State<Content> {
             child: new Container(
               margin: const EdgeInsets.only(top: 10.0),
               child: new Column(
-                children: _list.articles
+                children: _list
                     .map((f) => new OneColum(articleData: f))
                     .toList(),
               ),
@@ -106,10 +113,10 @@ class OneColum extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.push(context,
-              new MaterialPageRoute(
-                builder: (context)=> new Detail(article.url)
-              ));
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => new Detail(article.url)));
               print("ed");
             }),
       ],
@@ -122,7 +129,6 @@ class OneColum extends StatelessWidget {
         child: stack);
   }
 }
-
 
 class _ArticleTitleWidget extends StatelessWidget {
   final String title;

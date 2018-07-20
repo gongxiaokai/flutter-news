@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import './model/weType.dart';
-import 'package:http/http.dart' as Http;
-import 'dart:convert';
-import 'package:news/config.dart';
+import 'package:news/home/model/weType.dart';
 import 'content.dart';
-import 'package:news/shared.dart';
-import 'dart:async';
+import 'package:news/api/api.dart';
+
 class Home extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -18,40 +15,42 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   bool _isloading = true;
   List<WeType> _list;
   // var config = configSingletn;
-  _feachData() async {
-    String appid = Config.appid;
-    String secret = Config.secret;
-    String baseUrl = Config.baseUrl;
-    String apiId = Config.weTypeId;
-    String url = "$baseUrl$apiId?showapi_appid=$appid&showapi_sign=$secret";
-    await Http.get(url).then((Http.Response res) {
-      Map channelListJson = json.decode(res.body);
-      WeTypeList list = WeTypeList.fromJson(channelListJson);
-            print("object");
-      
-      Shared.saveSelectedType(list.types).then((onValue){
-        print(onValue);
-      });
-      
-      // r.then((onValue){
-      //   print(onValue);
-      //   if (onValue!= null){
-      //     print(onValue.length.toString() + "0009999");
-      //     setState(() {
-      //     _isloading = false;
-      //     _list = onValue;
-      // });
-      //   }
-      // });
-      
-    });
-  }
+  // _feachData() async {
+  //   String appid = Config.appid;
+  //   String secret = Config.secret;
+  //   String baseUrl = Config.baseUrl;
+  //   String apiId = Config.weTypeId;
+  //   String url = "$baseUrl$apiId?showapi_appid=$appid&showapi_sign=$secret";
+  //   await Http.get(url).then((Http.Response res) {
+  //     Map typeListJson = json.decode(res.body);
+  //     WeTypeList list = WeTypeList.fromJson(typeListJson);
+  //     //获取缓存数据
+  //     Shared.saveSelectedType(list.types).then((onValue) {
+  //       if (onValue != null) {
+  //         print(onValue.length.toString() + "0009999");
+  //         setState(() {
+  //           _isloading = false;
+  //           _list = onValue;
+  //         });
+  //       }
+  //     });
+  //   });
+  // }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _feachData();
+    // _feachData();
+
+    API.featchTypeListData((List<WeType> callback) {
+      setState(() {
+        _isloading = false;
+        _list = callback;
+      });
+    }, errorback: (error) {
+      print("error:$error");
+    });
     // featchData();
   }
 
@@ -73,14 +72,11 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                       isScrollable: true,
                       labelColor: Colors.white,
                       unselectedLabelColor: Colors.black,
-                      tabs: _list
-                          .map((f) => new Tab(text: f.name))
-                          .toList()),
+                      tabs: _list.map((f) => new Tab(text: f.name)).toList()),
                 ),
                 body: new TabBarView(
-                  children: _list
-                      .map((f) => new Content(channelId: f.id))
-                      .toList(),
+                  children:
+                      _list.map((f) => new Content(channelId: f.id)).toList(),
                 )),
           );
   }
