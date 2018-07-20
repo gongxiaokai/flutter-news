@@ -3,21 +3,15 @@ import 'dart:async';
 import 'package:news/home/model/weType.dart';
 
 class Shared {
+  //保存分类
   static Future<List<WeType>> saveSelectedType(List<WeType> list) async{
-    print(list);
-    // list.forEach((WeType f){
-    //   // WeType aaaaa = f;
-    //   print(f.name+"nnnnnnnnnnnnnnn");
-    // });
-    // String a = list.first.name;
-
-    // print(a+"99999");
     SharedPreferences pre =  await SharedPreferences.getInstance();
     await pre.setStringList("typeNames", list.map((WeType f) { return f.name;}).toList());
     await pre.setStringList("typeIds", list.map((WeType f) {return f.id;}).toList());
     return getSelectedType();
   }
 
+  //获取已选择的分类
   static Future<List<WeType>> getSelectedType() async {
     SharedPreferences pre =  await SharedPreferences.getInstance();
     List<String> typeNames = pre.getStringList("typeNames");

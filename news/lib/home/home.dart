@@ -14,34 +14,11 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> with TickerProviderStateMixin {
   bool _isloading = true;
   List<WeType> _list;
-  // var config = configSingletn;
-  // _feachData() async {
-  //   String appid = Config.appid;
-  //   String secret = Config.secret;
-  //   String baseUrl = Config.baseUrl;
-  //   String apiId = Config.weTypeId;
-  //   String url = "$baseUrl$apiId?showapi_appid=$appid&showapi_sign=$secret";
-  //   await Http.get(url).then((Http.Response res) {
-  //     Map typeListJson = json.decode(res.body);
-  //     WeTypeList list = WeTypeList.fromJson(typeListJson);
-  //     //获取缓存数据
-  //     Shared.saveSelectedType(list.types).then((onValue) {
-  //       if (onValue != null) {
-  //         print(onValue.length.toString() + "0009999");
-  //         setState(() {
-  //           _isloading = false;
-  //           _list = onValue;
-  //         });
-  //       }
-  //     });
-  //   });
-  // }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // _feachData();
 
     API.featchTypeListData((List<WeType> callback) {
       setState(() {
@@ -51,7 +28,6 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     }, errorback: (error) {
       print("error:$error");
     });
-    // featchData();
   }
 
   @override

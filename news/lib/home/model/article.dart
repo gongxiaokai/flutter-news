@@ -6,7 +6,6 @@ class Article {
   final String contentImg;
   final String title;
 
-
   Article.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         date = json['date'],
@@ -16,15 +15,14 @@ class Article {
         title = json['title'];
 }
 
-class ArticleList {
-  List<Article> articles;
+// class ArticleList {
+//   List<Article> articles;
+//   ArticleList():articles=[];
 
-  ArticleList():articles=[];
-
-  ArticleList.fromJson(Map<String, dynamic> json) {
-    articles = [];
-    for (var item in json['showapi_res_body']['pagebean']['contentlist']) {
-      articles.add(Article.fromJson(item));
-    }
-  }
-}
+//   ArticleList.fromJson(Map<String, dynamic> json) {
+//     articles = [];
+//     for (var item in json['showapi_res_body']['pagebean']['contentlist']) {
+//       articles.add(Article.fromJson(item));
+//     }
+//   }
+// }

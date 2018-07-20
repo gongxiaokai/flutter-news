@@ -17,10 +17,12 @@ class API {
     try {
       await Http.get(url).then((Http.Response res) {
         if (res.statusCode == 200) {
-          Map typeListJson = json.decode(res.body);
-          WeTypeList list = WeTypeList.fromJson(typeListJson);
-          Shared.saveSelectedType(list.types);
-          callback(list.types);
+          Map jsonMap = json.decode(res.body);
+          // WeTypeList list = WeTypeList.fromJson(typeListJson);
+          List jsonlist = jsonMap['showapi_res_body']['typeList'];
+          List<WeType> list = jsonlist.map((f) => WeType.fromJson(f)).toList();
+          Shared.saveSelectedType(list);
+          callback(list);
         }else {
           errorback(res.body);
         }
@@ -41,8 +43,10 @@ class API {
       if (response.statusCode == 200) {
         print(response.statusCode);
         Map jsonMap = json.decode(response.body);
-        ArticleList list = ArticleList.fromJson(jsonMap);
-        callback(list.articles);
+        List jsonlist = jsonMap['showapi_res_body']['pagebean']['contentlist'];
+        List<Article> list = jsonlist.map((f) => Article.fromJson(f)).toList();
+        // ArticleList list = ArticleList.fromJson(jsonMap);
+        callback(list);
       }else{
         errorback(response.body);
       }

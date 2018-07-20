@@ -7,7 +7,6 @@ import 'package:news/api/api.dart';
 class Content extends StatefulWidget {
   final String channelId;
 
-  // OneColum({List<String> columnData}) : this.columnData = columnData;
 
   Content({String channelId}) : this.channelId = channelId;
 
@@ -23,34 +22,10 @@ class ContentState extends State<Content> {
   bool _isloading = true;
   List<Article> _list;
 
-  // _feachData() async {
-  //   final String baseUrl = Config.baseUrl;
-  //   final String apiId = Config.weDetail;
-  //   final String appinfo = Config.appinfo;
-  //   final String url = "$baseUrl$apiId$appinfo" + "typeId=$typeId";
-  //   await Http.get(url).then((Http.Response response) {
-  //     if (response.statusCode == 200) {
-  //       print(response.statusCode);
-  //       Map jsonMap = json.decode(response.body);
-  //       // print(jsonMap);
-  //       ArticleList list = ArticleList.fromJson(jsonMap);
-  //       if (!mounted) {
-  //         return;
-  //       }
-  //       print("aaa");
-  //       setState(() {
-  //         _list = list;
-  //         _isloading = false;
-  //       });
-  //     }
-  //   });
-  // }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // _feachData();
 
     API.featchTypeDetailList(typeId, (List<Article> callback) {
       setState(() {
