@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'home/model/weType.dart';
 
 
 class Config {

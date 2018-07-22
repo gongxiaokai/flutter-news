@@ -15,14 +15,3 @@ class Article {
         title = json['title'];
 }
 
-// class ArticleList {
-//   List<Article> articles;
-//   ArticleList():articles=[];
-
-//   ArticleList.fromJson(Map<String, dynamic> json) {
-//     articles = [];
-//     for (var item in json['showapi_res_body']['pagebean']['contentlist']) {
-//       articles.add(Article.fromJson(item));
-//     }
-//   }
-// }

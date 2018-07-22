@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:news/home/model/weType.dart';
 import 'content.dart';
 import 'package:news/api/api.dart';
+import 'package:news/shared.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -19,11 +20,12 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     API.featchTypeListData((List<WeType> callback) {
-      setState(() {
-        _isloading = false;
-        _list = callback;
+      Shared.getSelectedType().then((onValue) {
+        setState(() {
+          _isloading = false;
+          _list = callback.where((t)=>onValue.contains(t.id)).toList();
+        });
       });
     }, errorback: (error) {
       print("error:$error");
