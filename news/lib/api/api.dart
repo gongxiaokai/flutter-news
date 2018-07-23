@@ -52,17 +52,19 @@ class API {
   }
 
   //获取分类数据详情
-  static void featchTypeDetailList(String typeId, Function callback,
+  static void featchTypeDetailList(int page,String typeId, Function callback,
       {List<Article> artileList, Function errorback}) async {
     final String baseUrl = Config.baseUrl;
     final String apiId = Config.weDetail;
     final String appinfo = Config.appinfo;
-    final String url = "$baseUrl$apiId$appinfo" + "typeId=$typeId";
+    print(page);
+    final String url = "$baseUrl$apiId$appinfo" + "typeId=$typeId" + "&page=$page";
     try {
       await Http.get(url).then((Http.Response response) {
         if (response.statusCode == 200) {
           print(response.statusCode);
           Map jsonMap = json.decode(response.body);
+          print(jsonMap);
           List jsonlist =
               jsonMap['showapi_res_body']['pagebean']['contentlist'];
           List<Article> list =

@@ -3,10 +3,10 @@ import 'package:news/home/model/article.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'detail.dart';
 import 'package:news/api/api.dart';
+import 'dart:async';
 
 class Content extends StatefulWidget {
   final String channelId;
-
 
   Content({String channelId}) : this.channelId = channelId;
 
@@ -20,17 +20,30 @@ class ContentState extends State<Content> {
   ContentState(this.typeId);
 
   bool _isloading = true;
-  List<Article> _list;
-
+  List<Article> _list = [];
+  ScrollController _contraller = new ScrollController();
+  int currentPage = 1;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _contraller.addListener(() {
+      var maxScroll = _contraller.position.maxScrollExtent;
+      var pixels = _contraller.position.pixels;
+      if (maxScroll == pixels) {
+        currentPage++;
+        _featchData();
+      }
+    });
 
-    API.featchTypeDetailList(typeId, (List<Article> callback) {
+    _featchData();
+  }
+
+  _featchData() {
+    API.featchTypeDetailList(currentPage, typeId, (List<Article> callback) {
       setState(() {
         _isloading = false;
-        _list = callback;
+        _list.addAll(callback);
       });
     }, errorback: (e) {
       print("error:$e");
@@ -41,6 +54,7 @@ class ContentState extends State<Content> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _contraller.dispose();
   }
 
   @override
@@ -50,19 +64,36 @@ class ContentState extends State<Content> {
         ? new Center(
             child: new CircularProgressIndicator(),
           )
-        : new SingleChildScrollView(
-            child: new Container(
-              margin: const EdgeInsets.only(top: 10.0),
-              child: new Column(
-                children: _list
-                    .map((f) => new OneColum(articleData: f))
-                    .toList(),
-              ),
-            ),
-          );
+        : new RefreshIndicator(
+            onRefresh: _refresh,
+            child: new ListView.builder(
+              itemCount: _list.length,
+              itemBuilder: (context, index) {
+                return new OneColum(articleData: _list[index]);
+              },
+              controller: _contraller,
+              
+            ));
+  }
+
+  Future<Null> _refresh() async {
+    currentPage=1;
+    _list = [];
+    _featchData();
+    return null;
   }
 }
 
+// new SingleChildScrollView(
+//             child: new Container(
+//               margin: const EdgeInsets.only(top: 10.0),
+//               child: new Column(
+//                 children: _list
+//                     .map((f) => new OneColum(articleData: f))
+//                     .toList(),
+//               ),
+//             ),
+//           );
 class OneColum extends StatelessWidget {
   final Article article;
   OneColum({Article articleData}) : article = articleData;
