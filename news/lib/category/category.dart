@@ -5,6 +5,8 @@ import 'package:news/shared.dart';
 import 'package:news/api/api.dart';
 
 class Category extends StatefulWidget {
+  const Category({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => new CategoryState();
 }
@@ -47,6 +49,18 @@ class CategoryState extends State<Category> {
     });
   }
 
+  _selectAll() {
+    print("all");
+    var r = _list.where((t) => t.isSelected).toList();
+    bool res = r.length < _list.length ? true : false;
+
+    setState(() {
+      _list = _list.map((f) => new WeType(f.id, f.name, res)).toList();
+      Shared.saveSelectedType(
+          _list.where((t) => t.isSelected).map((f) => f.id).toList());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return _isloading
@@ -54,11 +68,22 @@ class CategoryState extends State<Category> {
         : new Scaffold(
             appBar: new AppBar(
               title: new Text("分类"),
+              actions: <Widget>[
+                new FlatButton(
+                  onPressed: _selectAll,
+                  child: new Center(
+                      child: new Text(
+                    "全选",
+                    style: new TextStyle(color: Colors.white),
+                  )),
+                )
+              ],
             ),
             body: new GridView.count(
               // Create a grid with 2 columns. If you change the scrollDirection to
               // horizontal, this would produce 2 rows.
               crossAxisCount: 3,
+              crossAxisSpacing: 0.0,
               childAspectRatio: 2.0,
               // Generate 100 Widgets that display their index in the List
               children: _list
@@ -80,12 +105,12 @@ class _Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return new Row(
+    return new Stack(
+      alignment: AlignmentDirectional.centerEnd,
       children: <Widget>[
         new Container(
-          padding: EdgeInsets.only(left: 10.0),
-          width: 70.0,
-          child: new Center(child: new Text(title)),
+          width: ((MediaQuery.of(context).size.width/3) - 50),
+          child: new Text(title,style: TextStyle(fontSize: 18.0),),
         ),
         new Container(
           child: new Icon(Icons.check_circle,
@@ -93,5 +118,21 @@ class _Button extends StatelessWidget {
         )
       ],
     );
+
+    // return new Row(
+    //   crossAxisAlignment: CrossAxisAlignment.center,
+    //   children: <Widget>[
+    //     new Container(
+    //       color: Colors.yellow,
+    //       width: MediaQuery.of(context).size.width / 3 - 70,
+    //       child: new Center(child: new Text(title)),
+    //     ),
+    //     new Container(
+    //       width: 10.0,
+    //       child: new Icon(Icons.check_circle,
+    //           color: isSelected ? Colors.blue : Colors.black12),
+    //     )
+    //   ],
+    // );
   }
 }

@@ -11,10 +11,8 @@ class API {
       {List<WeType> typeList, Function errorback}) async {
     UserSinglen singlen = new UserSinglen();
     if (singlen.allTypes.length > 0) {
-            print("-------load local data--------");
-
+      print("-------load local data--------");
       callback(singlen.allTypes);
-
       return;
     }
     print("-------no list data , will be request the api--------");
@@ -24,47 +22,43 @@ class API {
     String apiId = Config.weTypeId;
     String url = "$baseUrl$apiId?showapi_appid=$appid&showapi_sign=$secret";
 
-    Shared.getSelectedType().then((onValue) {
-      if (onValue != null) {
-        callback(onValue);
-
-      } else {
-        try {
-          Http.get(url).then((Http.Response res) {
-            if (res.statusCode == 200) {
-              Map jsonMap = json.decode(res.body);
-              // WeTypeList list = WeTypeList.fromJson(typeListJson);
-              List jsonlist = jsonMap['showapi_res_body']['typeList'];
-              List<WeType> list =
-                  jsonlist.map((f) => WeType.fromJson(f)).toList();
-              singlen.allTypes = list;
-              Shared.saveSelectedType(list.map((f)=>f.id).toList());
-              callback(list);
-            } else {
-              errorback(res.body);
-            }
-          });
-        } catch (e) {
-          errorback(e);
-        }
+    try {
+        Http.get(url).then((Http.Response res) {
+          if (res.statusCode == 200) {
+            Map jsonMap = json.decode(res.body);
+            // WeTypeList list = WeTypeList.fromJson(typeListJson);
+            List jsonlist = jsonMap['showapi_res_body']['typeList'];
+            List<WeType> list =
+                jsonlist.map((f) => WeType.fromJson(f)).toList();
+            singlen.allTypes = list;
+            Shared.saveSelectedType(list.map((f) => f.id).toList());
+            print("list");
+            print(list);
+            callback(list);
+          } else {
+            errorback(res.body);
+          }
+        });
+      } catch (e) {
+        errorback(e);
       }
-    });
   }
 
   //获取分类数据详情
-  static void featchTypeDetailList(int page,String typeId, Function callback,
+  static void featchTypeDetailList(int page, String typeId, Function callback,
       {List<Article> artileList, Function errorback}) async {
     final String baseUrl = Config.baseUrl;
     final String apiId = Config.weDetail;
     final String appinfo = Config.appinfo;
     print(page);
-    final String url = "$baseUrl$apiId$appinfo" + "typeId=$typeId" + "&page=$page";
+    final String url =
+        "$baseUrl$apiId$appinfo" + "typeId=$typeId" + "&page=$page";
     try {
       await Http.get(url).then((Http.Response response) {
         if (response.statusCode == 200) {
           print(response.statusCode);
           Map jsonMap = json.decode(response.body);
-          print(jsonMap);
+          // print(jsonMap);
           List jsonlist =
               jsonMap['showapi_res_body']['pagebean']['contentlist'];
           List<Article> list =

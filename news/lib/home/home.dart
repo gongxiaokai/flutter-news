@@ -5,6 +5,8 @@ import 'package:news/api/api.dart';
 import 'package:news/shared.dart';
 
 class Home extends StatefulWidget {
+  const Home({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -12,7 +14,7 @@ class Home extends StatefulWidget {
   }
 }
 
-class HomeState extends State<Home> with TickerProviderStateMixin {
+class HomeState extends State<Home> {
   bool _isloading = true;
   List<WeType> _list;
 
@@ -22,10 +24,12 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     super.initState();
     API.featchTypeListData((List<WeType> callback) {
       Shared.getSelectedType().then((onValue) {
-        setState(() {
-          _isloading = false;
-          _list = callback.where((t)=>onValue.contains(t.id)).toList();
-        });
+        if (onValue != null) {
+          setState(() {
+            _isloading = false;
+            _list = callback.where((t) => onValue.contains(t.id)).toList();
+          });
+        }
       });
     }, errorback: (error) {
       print("error:$error");
@@ -36,9 +40,14 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     // TODO: implement build
     return _isloading
-        ? new Material(
-            child: new Center(
-              child: new CircularProgressIndicator(),
+        ? new Scaffold(
+            appBar: new AppBar(
+              title: new Text("loading..."),
+            ),
+            body: new Center(
+              child: new CircularProgressIndicator(
+                backgroundColor: Colors.black,
+              ),
             ),
           )
         : new DefaultTabController(

@@ -6,6 +6,8 @@ import 'about/about.dart';
 import 'category/category.dart';
 
 class Index extends StatefulWidget {
+    const Index({ Key key }) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => new IndexState();
 }
@@ -39,14 +41,14 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
     ];
 
     pageList = <StatefulWidget>[
-      new Home(),
-      new Category(),
+      new Home(key: new Key("home"),),
+      new Category(key: new Key("category"),),
       new About(),
     ];
 
-    // for(NavigationIcon view in navigationIcons) {
-    //   view.controller.addListener(rebuild());
-    // }
+    for(NavigationIcon view in navigationIcons) {
+      view.controller.addListener(rebuild());
+    }
 
     currentWidget = pageList[currentPageIndex];
   }
@@ -60,10 +62,10 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
     }
   }
 
-// rebuild(){
-//   print("rebuild");
-//   setState(() {});
-// }
+rebuild(){
+  print("rebuild");
+  setState(() {});
+}
 
   @override
   Widget build(BuildContext context) {

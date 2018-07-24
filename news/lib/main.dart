@@ -12,7 +12,7 @@ class FlutterNews extends StatelessWidget {
       return new MaterialApp(
         theme: Config.themeData,
         title: "News",
-        home: new Index(),
+        home: new Index(key: new Key("index"))
       );
     }
 }
