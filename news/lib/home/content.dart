@@ -84,16 +84,6 @@ class ContentState extends State<Content> {
   }
 }
 
-// new SingleChildScrollView(
-//             child: new Container(
-//               margin: const EdgeInsets.only(top: 10.0),
-//               child: new Column(
-//                 children: _list
-//                     .map((f) => new OneColum(articleData: f))
-//                     .toList(),
-//               ),
-//             ),
-//           );
 class OneColum extends StatelessWidget {
   final Article article;
   OneColum({Article articleData}) : article = articleData;

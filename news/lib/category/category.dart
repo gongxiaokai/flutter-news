@@ -88,6 +88,7 @@ class CategoryState extends State<Category> {
               // Generate 100 Widgets that display their index in the List
               children: _list
                   .map((f) => new FlatButton(
+                        padding: const EdgeInsets.all(10.0),
                         onPressed: () {
                           _onTapButton(f);
                         },
@@ -102,37 +103,54 @@ class _Button extends StatelessWidget {
   final String title;
   final bool isSelected;
   _Button(this.title, this.isSelected);
+  // @override
+  // Widget build(BuildContext context) {
+  //   // TODO: implement build
+  //   return new Stack(
+  //     alignment: AlignmentDirectional.centerEnd,
+  //     children: <Widget>[
+  //       new Container(
+  //         width: ((MediaQuery.of(context).size.width/3) - 50),
+  //         child: new Text(title,style: TextStyle(fontSize: 18.0),),
+  //       ),
+  //       new Container(
+  //         child: new Icon(Icons.check_circle,
+  //             color: isSelected ? Colors.blue : Colors.black12),
+  //       )
+  //     ],
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return new Stack(
-      alignment: AlignmentDirectional.centerEnd,
+      alignment: AlignmentDirectional.center,
       children: <Widget>[
+        new Container(child: new Text(title)),
         new Container(
-          width: ((MediaQuery.of(context).size.width/3) - 50),
-          child: new Text(title,style: TextStyle(fontSize: 18.0),),
+          child: new Center(
+            child: isSelected
+                ? new Icon(
+                    Icons.check,
+                    color: Colors.white,
+                  )
+                : null,
+          ),
+          decoration: new BoxDecoration(
+            color: isSelected ? Colors.black38: null,
+            borderRadius: new BorderRadius.all(
+              const Radius.circular(20.0),
+            ),
+          ),
         ),
-        new Container(
-          child: new Icon(Icons.check_circle,
-              color: isSelected ? Colors.blue : Colors.black12),
-        )
       ],
     );
-
-    // return new Row(
-    //   crossAxisAlignment: CrossAxisAlignment.center,
-    //   children: <Widget>[
-    //     new Container(
-    //       color: Colors.yellow,
-    //       width: MediaQuery.of(context).size.width / 3 - 70,
-    //       child: new Center(child: new Text(title)),
-    //     ),
-    //     new Container(
-    //       width: 10.0,
-    //       child: new Icon(Icons.check_circle,
-    //           color: isSelected ? Colors.blue : Colors.black12),
-    //     )
-    //   ],
+    // return new Container(
+    //   child: new Center(child: new Text(title),),
+    //   decoration: new BoxDecoration(
+    //     color: isSelected ? Colors.black12 : null
+    //   ),
     // );
   }
 }

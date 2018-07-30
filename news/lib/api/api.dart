@@ -10,6 +10,7 @@ class API {
   static void featchTypeListData(Function callback,
       {List<WeType> typeList, Function errorback}) async {
     UserSinglen singlen = new UserSinglen();
+    print(singlen.allTypes.length);
     if (singlen.allTypes.length > 0) {
       print("-------load local data--------");
       callback(singlen.allTypes);
