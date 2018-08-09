@@ -71,13 +71,13 @@ class ContentState extends State<Content> {
               itemBuilder: (context, index) {
                 return new OneColum(articleData: _list[index]);
               },
-              controller: _contraller,
-              
-            ));
+            controller: _contraller,
+            )
+          );
   }
 
   Future<Null> _refresh() async {
-    currentPage=1;
+    currentPage = 1;
     _list = [];
     _featchData();
     return null;

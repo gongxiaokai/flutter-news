@@ -10,4 +10,6 @@ class Config {
   static String appinfo = "?showapi_appid=69841&showapi_sign=d8d735599e2c405987c2810061f15180&";
   static String weTypeId = '582-1';
   static String weDetail = '582-2';
+  static String version = 'V1.0';
+
 }

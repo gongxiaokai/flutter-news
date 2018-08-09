@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:news/config.dart';
 import 'package:news/home/model/weType.dart';
 import 'package:news/shared.dart';
 import 'package:news/api/api.dart';
@@ -18,9 +17,6 @@ class CategoryState extends State<Category> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    UserSinglen singlen = new UserSinglen();
-    List<WeType> allTypes = singlen.allTypes;
-
     API.featchTypeListData((List<WeType> callback) {
       Shared.getSelectedType().then((onValue) {
         setState(() {
@@ -127,7 +123,21 @@ class _Button extends StatelessWidget {
     return new Stack(
       alignment: AlignmentDirectional.center,
       children: <Widget>[
-        new Container(child: new Text(title)),
+        new Container(
+          child: new Center(
+            child: new Text(title),
+          ),
+          decoration: new BoxDecoration(
+            color:  isSelected ? Colors.blue[200] : Colors.white,
+            borderRadius: new BorderRadius.all(
+              const Radius.circular(20.0),
+            ),
+            border: new Border.all(
+                color: isSelected ? Colors.white : Colors.blue[100],//边框颜色
+                width: 1.0,//边框宽度
+              ),
+          ),
+        ),
         new Container(
           child: new Center(
             child: isSelected
@@ -137,12 +147,12 @@ class _Button extends StatelessWidget {
                   )
                 : null,
           ),
-          decoration: new BoxDecoration(
-            color: isSelected ? Colors.black38: null,
-            borderRadius: new BorderRadius.all(
-              const Radius.circular(20.0),
-            ),
-          ),
+          // decoration:  new BoxDecoration(
+          //   color: isSelected ? Colors.blue[50] : null,
+          //   borderRadius: new BorderRadius.all(
+          //     const Radius.circular(20.0),
+          //   ),
+          // ),
         ),
       ],
     );
