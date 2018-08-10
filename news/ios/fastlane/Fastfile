@@ -17,10 +17,10 @@ desc "上传到测试版本到蒲公英"
   lane :topgyer do|option|
  
     #自动增加build
-    # increment_build_number
+    increment_build_number
  
     #自动生成证书
-#cert
+cert
  
     #自动生成配置文件
 #sigh(force: true)
@@ -44,21 +44,18 @@ desc "上传到测试版本到蒲公英"
     output_name = "#{scheme_name}_#{version}_#{build}_#{option[:desc]}_#{Time.now.strftime('%Y%m%d%H%M%S')}.ipa"
  
     gym(
-    include_bitcode: "false",	
-    export_method: "development",     #这里填写导出方式，我使用的是development
+  #  include_bitcode: "false",
+    configuration:"Release",
+    export_method: "app-store",     #这里填写导出方式，我使用的是development
     export_xcargs: "-allowProvisioningUpdates",
-    export_options:{
-	compileBitcode: false,
-	uploadBitcode: false,
-    },  
-	scheme: scheme_name,
-      clean: true,
-      output_directory: output_directory,
-      output_name: output_name
+    scheme: scheme_name,
+    clean: true,
+    output_directory: output_directory,
+    output_name: output_name
      )
   #使用自动证书管理
-   enable_automatic_code_signing(path: "#{scheme_name}.xcodeproj")
+   enable_automatic_code_signing
  
-    pgyer(api_key: "044eb9f16f9c220a5ea42f4e1cb181b7", user_key: "b115d8662287dc297594178c6db2a7b1", update_description: "#{option[:desc]}")
+#    pgyer(api_key: "044eb9f16f9c220a5ea42f4e1cb181b7", user_key: "b115d8662287dc297594178c6db2a7b1", update_description: "#{option[:desc]}")
 end
 end

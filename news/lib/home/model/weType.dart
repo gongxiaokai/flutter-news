@@ -1,7 +1,7 @@
 
 class WeType {
-  String id;
-  String name;
+  String id = "";
+  String name = "";
   bool isSelected = true;
 
   // WeType(this.id, this.name);

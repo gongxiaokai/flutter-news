@@ -32,10 +32,11 @@ class API {
             List<WeType> list =
                 jsonlist.map((f) => WeType.fromJson(f)).toList();
             singlen.allTypes = list;
-            Shared.saveSelectedType(list.map((f) => f.id).toList());
-            print("list");
-            print(list);
-            callback(list);
+            Shared.saveSelectedType(list.map((f) => f.id).toList()).then((v){
+              print("list");
+              print(list);
+              callback(list);
+            });
           } else {
             errorback(res.body);
           }

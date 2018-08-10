@@ -24,7 +24,10 @@ class HomeState extends State<Home> {
     super.initState();
     API.featchTypeListData((List<WeType> callback) {
       Shared.getSelectedType().then((onValue) {
+        print(onValue);
         if (onValue != null) {
+          print("lentch = ");
+          print(onValue.length);
           setState(() {
             _isloading = false;
             _list = callback.where((t) => onValue.contains(t.id)).toList();

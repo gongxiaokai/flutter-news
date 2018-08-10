@@ -99,23 +99,7 @@ class _Button extends StatelessWidget {
   final String title;
   final bool isSelected;
   _Button(this.title, this.isSelected);
-  // @override
-  // Widget build(BuildContext context) {
-  //   // TODO: implement build
-  //   return new Stack(
-  //     alignment: AlignmentDirectional.centerEnd,
-  //     children: <Widget>[
-  //       new Container(
-  //         width: ((MediaQuery.of(context).size.width/3) - 50),
-  //         child: new Text(title,style: TextStyle(fontSize: 18.0),),
-  //       ),
-  //       new Container(
-  //         child: new Icon(Icons.check_circle,
-  //             color: isSelected ? Colors.blue : Colors.black12),
-  //       )
-  //     ],
-  //   );
-  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -147,20 +131,10 @@ class _Button extends StatelessWidget {
                   )
                 : null,
           ),
-          // decoration:  new BoxDecoration(
-          //   color: isSelected ? Colors.blue[50] : null,
-          //   borderRadius: new BorderRadius.all(
-          //     const Radius.circular(20.0),
-          //   ),
-          // ),
+
         ),
       ],
     );
-    // return new Container(
-    //   child: new Center(child: new Text(title),),
-    //   decoration: new BoxDecoration(
-    //     color: isSelected ? Colors.black12 : null
-    //   ),
-    // );
+
   }
 }

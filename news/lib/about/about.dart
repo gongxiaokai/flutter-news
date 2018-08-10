@@ -37,8 +37,8 @@ class AboutState extends State<About> with TickerProviderStateMixin {
                 height: 50.0,
               ),
               new Center(
-                child: Image.network(
-                  "http://imgurl.xyz/images/2018/08/09/fnews2.png",
+                child: Image.asset(
+                  "imgs/logo.png",
                   width: 100.0,
                   height: 100.0,
                   fit: BoxFit.contain,
@@ -61,11 +61,8 @@ class AboutState extends State<About> with TickerProviderStateMixin {
                   child: new Container(
                     child: new Row(
                       children: <Widget>[
-                        new Image.network(
-                          "https://assets-cdn.github.com/images/modules/open_graph/github-mark.png",
-                          width: 50.0,
-                          height: 50.0,
-                        ),
+                        new Image.asset("imgs/github.png",width: 20.0,height: 20.0),
+                        new Container(width: 20.0),
                         new Text("Source Code")
                       ],
                     ),
